@@ -34,8 +34,8 @@ class Geocoder {
 	 * @param boolean $simple If true, only the lat/lng will be returned
 	 * @return GeocodeResult|GeocodeError
 	 */
-	public static function geocode( $location ) {
-		$response = self::scrapeAPI( $location );
+	public static function geocode( $location, $key ) {
+		$response = self::scrapeAPI( $location, $key );
 		if ( $response->status != 'OK' ) {
 			$error = new GeocodeError( $response->status, $location );
 			return $error;
@@ -49,8 +49,8 @@ class Geocoder {
 	 * @param string $location Location to geocode
 	 * @return GeocodeError|LatLng Returns a GeocodeError on error, LatLng on success.
 	 */
-	private static function scrapeAPI( $location ) {
-		$url = sprintf( "http://maps.google.com/maps/api/geocode/json?address=%s&sensor=false", urlencode( $location ) );
+	private static function scrapeAPI( $location, $key ) {
+		$url = sprintf( "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", urlencode( $location ), $key );
 		$response = json_decode( Scraper::scrape( $url ) );
 		return $response;
 	}
